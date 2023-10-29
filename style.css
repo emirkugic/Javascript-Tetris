@@ -9,10 +9,6 @@ body {
 }
 
 .container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	position: relative;
 	width: 100%;
 	max-width: 600px;
@@ -105,6 +101,7 @@ body {
 		grid-template-columns: repeat(10, 9vmin);
 		width: 90vmin;
 		height: 180vmin;
+		margin-top: 20px;
 	}
 
 	.next-tetromino .cell,
@@ -114,19 +111,25 @@ body {
 	}
 
 	.score {
+		position: static;
 		font-size: 4vw;
-		left: 0;
+		margin: 0;
+		margin-right: 20px;
 	}
 
 	.next-tetromino-window {
-		left: 0;
+		position: static;
 	}
 
 	.sidebar {
 		position: static;
 		transform: none;
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		align-items: center;
+		justify-content: center;
+		width: 100%;
+		padding-top: 20px;
+		gap: 20px;
 	}
 }
