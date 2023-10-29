@@ -2,6 +2,7 @@ const gameBoard = document.querySelector(".game-board");
 const boardWidth = 10;
 const boardHeight = 20;
 let score = 0;
+let isPaused = false;
 
 let board = Array.from({ length: boardHeight }, () =>
 	Array(boardWidth).fill(0)
@@ -81,8 +82,7 @@ function drawNextTetromino() {
 
 	const shapeWidth = nextTetromino.shape[0].length;
 
-	// Set the grid columns based on the shape's dimensions
-	nextTetrominoDiv.style.gridTemplateColumns = `repeat(${shapeWidth}, 36px)`; // Adjusted to 36px to account for border
+	nextTetrominoDiv.style.gridTemplateColumns = `repeat(${shapeWidth}, 36px)`;
 
 	for (let y = 0; y < nextTetromino.shape.length; y++) {
 		for (let x = 0; x < nextTetromino.shape[y].length; x++) {
@@ -157,7 +157,7 @@ function moveTetromino(direction) {
 	let newY = currentPosition.y;
 
 	if (direction === "down") {
-		newY += 1; // This is the line that was missing!
+		newY += 1;
 	} else if (direction === "left") {
 		newX -= 1;
 	} else if (direction === "right") {
@@ -187,7 +187,7 @@ function rotateTetromino() {
 	currentTetromino.shape = rotatedTetromino;
 
 	if (!canMoveTo(currentPosition.x, currentPosition.y)) {
-		currentTetromino.shape = originalShape; // Revert rotation if not valid
+		currentTetromino.shape = originalShape;
 	} else {
 		drawBoard();
 	}
@@ -222,7 +222,7 @@ function displayGameOver() {
 function restartGame() {
 	const gameOverDiv = document.querySelector(".game-over");
 	if (gameOverDiv) {
-		gameOverDiv.style.display = "none"; // Hide the game over div
+		gameOverDiv.style.display = "none";
 	}
 
 	board = Array.from({ length: boardHeight }, () => Array(boardWidth).fill(0));
@@ -237,10 +237,9 @@ function clearLines() {
 
 	for (let y = boardHeight - 1; y >= 0; y--) {
 		if (board[y].every((value) => value !== 0)) {
-			// Remove line and add new one at the top
 			board.splice(y, 1);
 			board.unshift(Array(boardWidth).fill(0));
-			y++; // Check the same line index again as we removed a line
+			y++;
 			linesCleared++;
 		}
 	}
@@ -260,30 +259,63 @@ function clearLines() {
 			break;
 	}
 
-	// Update score on the screen
 	document.querySelector(".score").innerText = "Score: " + score;
 }
 
+function togglePause() {
+	isPaused = !isPaused;
+
+	if (isPaused) {
+		displayPause();
+	} else {
+		hidePause();
+	}
+}
+
+function displayPause() {
+	let pauseDiv = document.querySelector(".pause");
+
+	if (!pauseDiv) {
+		pauseDiv = document.createElement("div");
+		pauseDiv.classList.add("pause");
+		pauseDiv.innerHTML = `<h1>Paused</h1>`;
+	}
+
+	if (!pauseDiv.isConnected) {
+		gameBoard.appendChild(pauseDiv);
+	}
+
+	pauseDiv.style.display = "block";
+}
+
+function hidePause() {
+	const pauseDiv = document.querySelector(".pause");
+	if (pauseDiv) {
+		pauseDiv.style.display = "none";
+	}
+}
+
 document.addEventListener("keydown", function (event) {
+	if (isPaused && event.keyCode !== 27) {
+		return;
+	}
 	if (event.keyCode === 37) {
 		moveTetromino("left");
 	} else if (event.keyCode === 39) {
 		moveTetromino("right");
-	}
-
-	if (event.keyCode === 38) {
-		// Up arrow
+	} else if (event.keyCode === 38) {
 		rotateTetromino();
-	}
-
-	if (event.keyCode === 40) {
-		// Down arrow
+	} else if (event.keyCode === 40) {
 		moveTetromino("down");
+	} else if (event.keyCode === 27) {
+		togglePause();
 	}
 });
 
 spawnTetromino();
 
 setInterval(() => {
-	moveTetromino("down");
+	if (!isPaused) {
+		moveTetromino("down");
+	}
 }, 1000);
