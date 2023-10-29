@@ -59,19 +59,41 @@ const tetrominoes = [
 
 let currentTetromino = null;
 let currentPosition = { x: 4, y: 0 };
+let nextTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
 
 function spawnTetromino() {
-	currentTetromino =
-		tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+	currentTetromino = nextTetromino;
+	nextTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
 	currentPosition = { x: 4, y: 0 };
 
-	// Check if the tetromino can be placed at the initial position.
 	if (!canMoveTo(currentPosition.x, currentPosition.y)) {
-		displayGameOver(); // If not, game over.
+		displayGameOver();
 		return;
 	}
 
 	drawBoard();
+	drawNextTetromino();
+}
+
+function drawNextTetromino() {
+	const nextTetrominoDiv = document.querySelector(".next-tetromino");
+	nextTetrominoDiv.innerHTML = "";
+
+	const shapeWidth = nextTetromino.shape[0].length;
+
+	// Set the grid columns based on the shape's dimensions
+	nextTetrominoDiv.style.gridTemplateColumns = `repeat(${shapeWidth}, 36px)`; // Adjusted to 36px to account for border
+
+	for (let y = 0; y < nextTetromino.shape.length; y++) {
+		for (let x = 0; x < nextTetromino.shape[y].length; x++) {
+			const div = document.createElement("div");
+			div.classList.add("cell");
+			div.style.backgroundColor = nextTetromino.shape[y][x]
+				? nextTetromino.color
+				: "";
+			nextTetrominoDiv.appendChild(div);
+		}
+	}
 }
 
 function canMoveTo(newX, newY) {
@@ -110,6 +132,8 @@ function drawBoard() {
 				currentTetromino.shape[y - currentPosition.y][x - currentPosition.x]
 			) {
 				color = currentTetromino.color;
+				div.style.borderRight = "none";
+				div.style.borderBottom = "none";
 			}
 			div.style.backgroundColor = color;
 			gameBoard.appendChild(div);

@@ -8,27 +8,51 @@ body {
 	overflow: hidden;
 }
 
-.game-board {
-	display: grid;
-	grid-template-columns: repeat(10, 30px);
-	width: 300px;
-	height: 600px;
-	border: 1px solid #333;
+.container {
+	display: flex;
+	align-items: center;
 }
 
-.game-board .cell {
-	width: 30px;
-	height: 30px;
-	border: 1px solid #ddd;
-	box-sizing: border-box;
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-right: 20px;
 }
 
 .score {
-	position: absolute;
-	top: 20px;
-	left: 50%;
-	transform: translateX(-50%);
 	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+.next-tetromino-window {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* border: 1px solid #333; */
+	padding: 10px;
+}
+
+.next-tetromino {
+	display: grid;
+	/* Remove the gap */
+}
+
+.next-tetromino .cell,
+.game-board .cell {
+	width: 35px;
+	height: 35px;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+	background-color: transparent; /* Ensures a transparent background by default */
+}
+
+.game-board {
+	display: grid;
+	grid-template-columns: repeat(10, 35px);
+	width: 370px;
+	height: 730px;
+	/* border: 1px solid #333; */
 }
 
 .game-over {
@@ -41,7 +65,7 @@ body {
 	text-align: center;
 	border-radius: 10px;
 	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-	z-index: 10; /* Add this to ensure it's on top */
+	z-index: 10;
 }
 
 .game-over h1 {
