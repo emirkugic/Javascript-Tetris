@@ -18,7 +18,7 @@ const tetrominoes = [
 			[1, 1],
 			[1, 1],
 		],
-		color: "yellow",
+		color: "teal",
 	},
 	{
 		shape: [
