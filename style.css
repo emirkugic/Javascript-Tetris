@@ -9,15 +9,17 @@ body {
 }
 
 .container {
-	display: flex;
-	align-items: center;
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+	margin: 0 auto;
 }
 
 .sidebar {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-right: 20px;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%);
 }
 
 .score {
@@ -29,22 +31,25 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	/* border: 1px solid #333; */
-	padding: 10px;
+	padding: 0px;
 }
 
 .next-tetromino {
 	display: grid;
-	/* Remove the gap */
 }
 
 .next-tetromino .cell,
 .game-board .cell {
 	width: 35px;
 	height: 35px;
-	border: 1px solid #ddd;
+	display: grid;
+	border: 1px solid #333;
 	box-sizing: border-box;
-	background-color: transparent; /* Ensures a transparent background by default */
+	background-color: transparent;
+}
+
+.game-board {
+	margin: 0 auto;
 }
 
 .game-board {
@@ -52,7 +57,6 @@ body {
 	grid-template-columns: repeat(10, 35px);
 	width: 370px;
 	height: 730px;
-	/* border: 1px solid #333; */
 }
 
 .game-over {
