@@ -193,6 +193,50 @@ function rotateTetromino() {
 	}
 }
 
+// for mobile devices
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+document.addEventListener(
+	"touchstart",
+	function (event) {
+		touchStartX = event.changedTouches[0].screenX;
+		touchStartY = event.changedTouches[0].screenY;
+	},
+	false
+);
+
+document.addEventListener(
+	"touchend",
+	function (event) {
+		touchEndX = event.changedTouches[0].screenX;
+		touchEndY = event.changedTouches[0].screenY;
+		handleSwipe();
+	},
+	false
+);
+
+function handleSwipe() {
+	let dx = touchEndX - touchStartX;
+	let dy = touchEndY - touchStartY;
+
+	if (Math.abs(dx) > Math.abs(dy)) {
+		if (dx > 0) {
+			moveTetromino("right");
+		} else {
+			moveTetromino("left");
+		}
+	} else {
+		if (dy > 0) {
+			moveTetromino("down");
+		} else {
+			rotateTetromino();
+		}
+	}
+}
+
 function checkGameOver() {
 	for (let x = 0; x < boardWidth; x++) {
 		if (board[0][x] !== 0) {
